@@ -128,9 +128,16 @@ const ReportsDashboard: React.FC<DashboardProps> = ({ allStudentData, onBack, la
       setIsGeneratingReport(true);
       setGeneratedReport(null);
       setError('');
+      
+      const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
+      if (!apiKey) {
+          setError("API key is not configured. Please ensure VITE_GEMINI_API_KEY is set in your deployment environment.");
+          setIsGeneratingReport(false);
+          return;
+      }
+
       try {
-        // FIX: Use process.env.API_KEY for the Gemini API key and remove the check for its existence.
-        const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+        const ai = new GoogleGenAI({ apiKey });
         const dataSummary = summarizeDataForPrompt(studentData, lang);
 
         const prompt = `
