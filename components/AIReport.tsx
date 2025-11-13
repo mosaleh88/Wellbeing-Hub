@@ -1,4 +1,5 @@
 
+
 import React, { useState, useEffect } from 'react';
 import { GoogleGenAI } from '@google/genai';
 import type { StudentData, ChallengeActivity } from '../types';
@@ -88,14 +89,8 @@ const AIReport: React.FC<Props> = ({ studentData, onReset, lang }) => {
     const generateReport = async () => {
       setIsLoading(true);
       setError('');
-      // FIX: Use process.env.API_KEY as per the coding guidelines.
-      if (!process.env.API_KEY) {
-        setError("API key is not configured. Please contact the administrator.");
-        setIsLoading(false);
-        return;
-      }
       try {
-        // FIX: Use process.env.API_KEY as per the coding guidelines.
+        // FIX: Use process.env.API_KEY for the Gemini API key and remove the check for its existence.
         const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
         const dataSummary = summarizeDataForPrompt(studentData, lang);
 
