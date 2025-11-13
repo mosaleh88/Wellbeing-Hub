@@ -88,17 +88,19 @@ const AIReport: React.FC<Props> = ({ studentData, onReset, lang }) => {
 
   useEffect(() => {
     const generateReport = async () => {
-      setIsLoading(true);
-      setError('');
-      // FIX: Use process.env.API_KEY per coding guidelines.
-      if (!process.env.API_KEY) {
+    setIsLoading(true);
+    setError('');
+    
+    // 🛑 CRITICAL FIX: Use the Vite-native environment variable syntax
+    if (!import.meta.env.VITE_GEMINI_API_KEY) { 
         setError("API key is not configured. Please contact the administrator.");
         setIsLoading(false);
         return;
-      }
-      try {
-        // FIX: Use process.env.API_KEY per coding guidelines.
-        const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+    }
+    
+    try {
+        // 🛑 CRITICAL FIX: Initialize with the correct key source
+        const ai = new GoogleGenAI({ apiKey: import.meta.env.VITE_GEMINI_API_KEY });
         const dataSummary = summarizeDataForPrompt(studentData, lang);
 
         const prompt = `
