@@ -126,18 +126,20 @@ const ReportsDashboard: React.FC<DashboardProps> = ({ allStudentData, onBack, la
   };
 
   const handleGenerateReport = async (studentData: StudentData) => {
-      setIsGeneratingReport(true);
-      setGeneratedReport(null);
-      setError('');
-      // FIX: Use process.env.API_KEY per coding guidelines.
-      if (!process.env.API_KEY) {
+    setIsGeneratingReport(true);
+    setGeneratedReport(null);
+    setError('');
+    
+    // 🛑 CRITICAL FIX: Use the Vite-native environment variable syntax
+    if (!import.meta.env.VITE_GEMINI_API_KEY) { 
         setError("API key is not configured. Please contact the administrator.");
         setIsGeneratingReport(false);
         return;
-      }
-      try {
-        // FIX: Use process.env.API_KEY per coding guidelines.
-        const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+    }
+    
+    try {
+        // 🛑 CRITICAL FIX: Initialize with the correct key source
+        const ai = new GoogleGenAI({ apiKey: import.meta.env.VITE_GEMINI_API_KEY });
         const dataSummary = summarizeDataForPrompt(studentData, lang);
 
         const prompt = `
